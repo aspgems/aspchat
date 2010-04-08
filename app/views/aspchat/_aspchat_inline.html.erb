@@ -1,0 +1,41 @@
+<%if session[:user_id] -%>
+	<div id="chat-container">
+		<div class="chat-channel-content" id="chat-user-list"></div>		
+		<div id="chat-input-area">		
+  			<% form_remote_tag :url => '/aspchat/messages', 
+                       :before=>"Aspchat.chatPrepareRemoteSubmit();", 
+                       :after=>"Aspchat.displaySelfMessage();", 
+                       :html=>{:id=>'chat-input-area-form'} do -%>
+    		<div class="chat-input-text-area">
+				<%=hidden_field_tag 'to', nil %>
+				<%=hidden_field_tag 'resource', nil %>
+      			<%=text_area_tag 'message', nil, :size => "45x1" %>
+			</div>	
+    		<div class="chat-input-button-area">
+      			<button type="submit" class="positive"><%=image_tag '/aspchat/images/accept.png', :alt=>t('.send'), :title=>t('.send')%><%= t '.send' %></button>
+      			<button type="button" class="negative" onclick="Aspchat.chatHideAllChannels();"><%=image_tag '/aspchat/images/application_put.png', :alt=>t('.hide_channels'), :title=>t('.hide_channels')%><%= t '.hide_channels' %></button>
+			</div>	
+	  		<% end -%>
+		</div>
+		<div id="chat-area">
+			<div id="chat-bar">
+				 <ul id="chat-channel-list">
+				 	<li id="chat-status-tab">				 		
+				 		<%if session[:aspchat_offline] -%>
+				 			<%= render :partial => '/aspchat/aspchat_inline_connect' %>
+						<% else %>
+							<%= render :partial => '/aspchat/aspchat_inline_disconnect' %>
+						<% end %>	
+					</li>
+				 	<li id="chat-user-list-tab">
+				 		<%=image_tag '/aspchat/images/ajax-loader.gif', :class=>'hidden ajax-loader', :title=>t('.loading')%>						
+						<span id="chat-user-list-tab-label"> <%=image_tag '/aspchat/images/group.png', :alt=>t('.users'), :title=>t('.users')%><%=t '.users'%></span>
+					</li>
+				 </ul>
+			</div>	
+		</div>		
+		
+	</div>
+<%end -%>	
+<%=javascript_tag('Aspchat.online=false;') if session[:aspchat_offline] %>
+

@@ -1,0 +1,25 @@
+en:
+  aspchat:
+   aspchat_inline:
+    connect: "connect"
+    disconnect: "disconnect"   
+    hide_channels: "close"
+    loading: "loading..."
+    send: "send"
+    users: "users"    
+   users:
+    open_chat: "chat with {{nickname}}"  
+    your_nickname: "that's you!"
+es:
+  aspchat:
+   aspchat_inline:
+    connect: "conectar"
+    disconnect: "desconectar"
+    hide_channels: "cerrar"
+    loading: "cargando..."
+    send: "enviar"
+    users: "usuarios"
+   users:
+    open_chat: "hablar con {{nickname}}"
+    your_nickname: "¡ése eres tú!"
+    

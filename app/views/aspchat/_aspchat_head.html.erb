@@ -1,0 +1,12 @@
+<%if session[:user_id] -%>
+	<%nickname=session[:nickname] %>
+	<%= javascript_include_tag '/aspchat/javascripts/aspchat' %>
+	<%= stylesheet_link_tag '/aspchat/stylesheets/aspchat' %>
+	<% unless nickname.blank? -%>
+		<script language="JavaScript" type="text/javascript">
+		    //<![CDATA[	
+		    Aspchat.chatSetNickname('<%=nickname%>');
+		    //]]>
+		</script>
+	<%end -%>
+<%end -%>

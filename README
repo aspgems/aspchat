@@ -1,0 +1,71 @@
+Aspchat
+=======
+
+1. In order to install this plugin, you must execute the following task
+  rake aspchat:install
+  
+2. If you are using memcached already, maybe the CACHE constant will be set. Otherwise, you need to configure the CACHE 
+constant during the initialization process like  this (host/port namespace are irrelevant for the chat)
+
+	CACHE = ::MemCache.new 'localhost:11211', :namespace => 'asp_chat_dev'   
+
+
+
+3. Now you must enable the chat by including the head section and the chat inline bar like this
+
+-----
+<head>
+	<%= javascript_include_tag :defaults %>
+	<%=render :partial=>'aspchat/aspchat_head'%>
+</head>
+<body>
+	<%if RAILS_ENV=='development' #this condition is so you don't poll very often in development mode, slowing down everything %>  
+		<%=javascript_tag "Aspchat.polling_interval=60;" %>
+		<%=javascript_tag "Aspchat.polling_list_interval=90;" %>
+	<%end -%>
+	<%=render :partial=>'aspchat/aspchat_inline'%>
+</body>
+-----
+The chat library depends on prototype. Make sure you included it.
+Make *really* sure you are running an up-to-date prototype.js (hint: not the one bundled with rails). If not, things will not work fine on IE8.
+
+------
+The chat component expects a :user_id and a :nickname param to be available in the session. Else, nothing will work (symptoms will be a 500 error when the polling is done)
+
+If you are using AUthenticatedSystem, you can easily add the session id on signup/login by including this code in your ApplicationController
+
+protected  
+  def current_user_with_aspchat=(new_user)
+      set_current_user(new_user)
+      session[:nickname] = @current_user ? @current_user.login : nil  #you might want to change the "login" field by any other in your model. Make sure is unique!
+      @current_user
+  end  
+  alias_method (:set_current_user, :current_user=)
+  alias_method (:current_user=, :current_user_with_aspchat=)
+
+
+---------------
+If you want to override the user list functionality (to filter user's friends, for example) the
+easiest way is to override the "aspchat_polling_users" method of the AspchatHelper. This method
+is used by the chat to retrieve the list of users, so by changing it here it will be transparent
+
+You can do it by modifying your ApplicationHelper like in this example
+
+module ApplicationHelper
+  include AspchatHelper
+    
+  #returns a hash in which the user_id is the key containing another hash like
+  #   1=>{:nickname=>"admin"}, 9=>{:nickname=>"user"}}
+  # this example method will display only users with id lower than 10   
+  def aspchat_polling_users_with_permissions
+    users=aspchat_polling_users_without_permissions
+    users.delete_if {|user_id, user_object| user_id > 10  }  
+    users
+  end  
+  alias_method_chain :aspchat_polling_users, :permissions
+  
+end
+
+----------------
+
+Copyright (c) 2009 [jramirez@aspgems.com], released under the MIT license

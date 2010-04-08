@@ -1,0 +1,10 @@
+<%aspchat_users_by_nickname.sort.each do |user_object| %>
+	<% nickname, user_id = user_object.first, user_object.last%>
+	<%if user_id == session[:user_id]%>
+		<%=image_tag '/aspchat/images/asterisk_orange.png', :alt=>t('.your_nickname'), :title=>t('.your_nickname')%>
+		<span title="<%=t('.your_nickname')%>"><%=nickname%><br/></span>
+	<%else%>
+		<%=image_tag '/aspchat/images/comment.png', :alt=>t(".open_chat", :nickname=>nickname), :title=>t(".open_chat", :nickname=>nickname)%>
+		<%=link_to_function nickname, "Aspchat.chatCreatePrivate('#{nickname}', #{user_id});", :title=>t(".open_chat", :nickname=>nickname)%><br/>
+	<%end%>	
+<%end%>
