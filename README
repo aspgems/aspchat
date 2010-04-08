@@ -1,3 +1,15 @@
+This is a rails chat plugin with a memcached backend (but decoupled, so you could write your own backend with redis, a db, or as you please). Conversations are non persistent and at the moment it supports only private chats. Most of the code for managing chat rooms is in place already, but some work would be needed for that (most notably the UI).
+------
+
+Status of this plugin:
+
+the plugin is working in one of our sites in production. However, we are not sure it's mature enough for living in the wild without a little love and understanding
+
+right now it lacks testing and the documentation is obscure (just some comments in the code and this readme)
+
+however we are releasing the plugin to the open source community already because we know it could be of use already for some people, so you are warned.. use it at your own risk!
+
+
 Aspchat
 =======
 
